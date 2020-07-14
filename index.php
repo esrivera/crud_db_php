@@ -21,12 +21,12 @@ $eliminar = "Eliminar";
 //AGREGAR ESTADIO
 if (isset($_POST["accion"]) && ($_POST["accion"] == "Agregar")) {
     $stmt = $conex->prepare("INSERT INTO estadio (nombre, ciudad, direccion, capacidad, fecha_inaguracion ) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssid", $nombre, $ciudad, $direccion, $capacidad, $fecInaguracion);
+    $stmt->bind_param("sssis", $nombre, $ciudad, $direccion, $capacidad, $fecInaguracion);
     $nombre = $_POST["nombre"];
     $ciudad = $_POST["ciudad"];
     $direccion = $_POST["direccion"];
     $capacidad = $_POST["capacidad"];
-    $fecInaguracion = $_POST["fecha_inaguracion"];
+    $fecInaguracion = $_POST["fecInaguracion"];
     $stmt->execute();
     $stmt->close();
     $codEstadio = "";
@@ -39,21 +39,21 @@ if (isset($_POST["accion"]) && ($_POST["accion"] == "Agregar")) {
 //MODIFICAR ESTADIO
 else if (isset($_POST["accion"]) && ($_POST["accion"] == "Modificar")) {
     $stmt = $conex->prepare("UPDATE estadio SET nombre = ?, ciudad = ?, direccion = ?, capacidad = ?, fecha_inaguracion = ? WHERE cod_estadio = ?");
-    $stmt->bind_param("sssidi", $nombre, $ciudad, $direccion, $capacidad, $fecInaguracion);
+    $stmt->bind_param("sssisi", $nombre, $ciudad, $direccion, $capacidad, $fecInaguracion, $codEstadio);
     $nombre = $_POST["nombre"];
     $ciudad = $_POST["ciudad"];
     $direccion = $_POST["direccion"];
     $capacidad = $_POST["capacidad"];
-    $fecInaguracion = $_POST["fecha_inaguracion"];
+    $fecInaguracion = $_POST["fecInaguracion"];
     $codEstadio = $_POST["codEstadio"];
     $stmt->execute();
     $stmt->close();
-    $codEstadio = "";
     $nombre = "";
     $ciudad = "";
     $direccion = "";
     $capacidad = "";
     $fecInaguracion = "";
+    $codEstadio = "";
 } 
 else if (isset($_GET["update"])) {
     $result = $conex->query("SELECT * FROM estadio WHERE cod_estadio=" . $_GET["update"]);
@@ -64,18 +64,16 @@ else if (isset($_GET["update"])) {
         $ciudad = $row1["ciudad"];
         $direccion = $row1["direccion"];
         $capacidad = $row1["capacidad"];
-        $fecInaguracion = "fecha_Inaguracion";
+        $fecInaguracion = $row1["fecha_inaguracion"];
         $accion = "Modificar";
     }
 } 
 //ELIMINAR ESTADIO
-else if (isset($_POST["eliminar"])) {
-    $stmt = $conex->prepare("DELETE FROM estadio WHERE cod_estadio = ?");
-    $stmt->bind_param("i", $codEstadio);
-    $codEstadio = $_POST["eliminar"];
+else if (isset($_GET["delete"])) {
+    $stmt = $conex->prepare("DELETE FROM estadio WHERE cod_estadio = ".$_GET["delete"]);
     $stmt->execute();
     $stmt->close();
-    $codProducto = "";
+    $codEstadio = "";
 }
 ?>
 
@@ -258,18 +256,19 @@ else if (isset($_POST["eliminar"])) {
                 </div>
                 <!-- ============================================================== -->
                 <!-- Table -->
-                <input type="hidden" name="codEstadio" value="<?php echo $codEstadio ?>">
+                
                 <!-- Column -->
                 <div class="col-lg-8 col-xlg-9 col-md-7">
                     <div class="card">
                         <div class="card-body">
-                            <form class="form-horizontal form-material" method="post" action="index.php">
+                            <form name="forma" class="form-horizontal form-material" method="post" action="index.php">
+                                <input type="hidden" name="codEstadio" value="<?php echo $codEstadio ?>">
                                 <div class="form-group">
                                     <label class="col-md-12">Nombre</label>
                                     <div class="col-md-12">
                                         <input type="text" placeholder="Anfield Stadium" class="form-control
                                             form-control-line" name="nombre"
-                                            id="nombre" value="<?php echo $nombre ?>">
+                                            id="nombre" value="<?php echo $nombre ?>" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -280,7 +279,7 @@ else if (isset($_POST["eliminar"])) {
                                             placeholder="Liverpool"
                                             class="form-control
                                             form-control-line" name="ciudad"
-                                            id="ciudad" value="<?php echo $ciudad ?>">
+                                            id="ciudad" value="<?php echo $ciudad ?>" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -289,7 +288,7 @@ else if (isset($_POST["eliminar"])) {
                                         <input type="text" placeholder="Anfield Road"
                                             class="form-control
                                             form-control-line" name="direccion"
-                                            id="direccion" value="<?php echo $direccion ?>">
+                                            id="direccion" value="<?php echo $direccion ?>" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -300,22 +299,22 @@ else if (isset($_POST["eliminar"])) {
                                             class="form-control
                                             form-control-line col-sm-6"
                                             name="capacidad" id="capacidad"
-                                            min="1" max="100000" value="<?php echo $capacidad ?>">
+                                            min="1" max="100000" value="<?php echo $capacidad ?>" required>
                                         <div class="input-group-prepend
                                             cold-md-4">
                                             <span class="input-group-text"></span>
                                         </div>
-                                        <input type="date" placeholder="28/09/1884"
+                                        <input type="date"
                                             class="form-control
                                             form-control-line col-sm-6"
-                                            name="fecha_inaguracion"
-                                            id="fecha_inaguracion" value="<?php echo $fecInaguracion ?>">
+                                            name="fecInaguracion"
+                                            id="fecInaguracion" value="<?php echo $fecInaguracion ?>" min="1860-07-10" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-success
-                                            btn-block">Agregar</button>
+                                        <input class="btn btn-success
+                                            btn-block" type="submit" name="accion" value="<?php echo $accion ?>">
                                     </div>
                                 </div>
                             </form>
@@ -352,7 +351,7 @@ else if (isset($_POST["eliminar"])) {
     </body>
 
     <script>
-    function eliminacionProducto() {
+    function eliminacionEstadio() {
         document.getElementById("forma").submit();
     }
     </script>
