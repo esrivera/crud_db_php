@@ -123,7 +123,7 @@ else if (isset($_GET["delete"])) {
                         <!-- ============================================================== -->
                         <!-- Logo -->
                         <!-- ============================================================== -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="index.php">
                             <!-- Logo icon -->
                             <b class="logo-icon">
                                 <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -168,7 +168,7 @@ else if (isset($_GET["delete"])) {
                         <ul id="sidebarnav">
                             <li class="sidebar-item"> <a class="sidebar-link
                                     waves-effect waves-dark sidebar-link"
-                                    href="index.html" aria-expanded="false"><i
+                                    href="index.php" aria-expanded="false"><i
                                         class="mdi mdi-view-dashboard"></i><span
                                         class="hide-menu">Gestión Estadios</span></a></li>
                         </ul>
@@ -349,10 +349,4 @@ else if (isset($_GET["delete"])) {
             src="./assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
         <script src="./dist/js/pages/dashboards/dashboard1.js"></script>
     </body>
-
-    <script>
-    function eliminacionEstadio() {
-        document.getElementById("forma").submit();
-    }
-    </script>
 </html>
